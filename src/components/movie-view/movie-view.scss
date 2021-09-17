@@ -3,12 +3,12 @@
   margin: 50px;
 }
 .movie-poster {
-  width: 800px;
-  background-color: deeppink;
+  flex: 2;
 }
 .movie-poster-img {
   width: 100%;
 }
 .movie-info {
+  flex: 3;
   padding: 20px;
 }
