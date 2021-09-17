@@ -16,6 +16,7 @@ export default function RegistrationView(props) {
 
   return (
     <Form>
+      <h3>Register</h3>
       <Form.Group controlId="registrationFormUsername">
         <Form.Label>Username:</Form.Label>
         <Form.Control type="text" onChange={e => setUsername(e.target.value)} />
@@ -25,7 +26,7 @@ export default function RegistrationView(props) {
         <Form.Label>Password:</Form.Label>
         <Form.Control type="password" onChange={e => setPassword(e.target.value)} />
       </Form.Group>
-      
+      <br></br>
       <Button variant="primary" type="submit" onClick={handleSubmit}>
         Register
       </Button>

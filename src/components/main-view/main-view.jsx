@@ -53,10 +53,14 @@ export default class MainView extends React.Component {
 
     const {movies, selectedMovie, user} = this.state;
 
-    if (!user) return <>    
-    <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />    
-    <RegistrationView onRegister={(user, password) => this.onRegister(user, password)} />
-    </>;
+    if (!user) return <Row className="main-view justify-content-md-center">    
+      <Col md={3}>
+        <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />  
+      </Col>
+      <Col md={3}>
+        <RegistrationView onRegister={(user, password) => this.onRegister(user, password)} />
+      </Col>
+    </Row>;
 
     if (movies.length === 0) 
       return <div className="main-view">The list is empty!</div>;
@@ -66,7 +70,7 @@ export default class MainView extends React.Component {
         {selectedMovie
           ? (
           <Col md={8}>
-            <MovieView movie={selectedMovie} onBackClick={newSelectedMovie => { this.setSelectedMovie(newSelectedMovie); }}/>
+            <MovieView className='mt-5' movie={selectedMovie} onBackClick={newSelectedMovie => { this.setSelectedMovie(newSelectedMovie); }}/>
           </Col>
           )
           : movies.map(movie => (
