@@ -15,6 +15,7 @@ export default function LoginView(props) {
 
   return (
     <form>
+      <h4>Login</h4>
       <label>
         Username:
         <input type="text" value={username} onChange={e => setUsername(e.target.value)} />

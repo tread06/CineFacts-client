@@ -12,6 +12,7 @@ export default function RegistrationView(props) {
 
   return (
     <form>
+      <h4>Register</h4>
       <label>
         Username:
         <input type="text" value={username} onChange={e => setUsername(e.target.value)} />

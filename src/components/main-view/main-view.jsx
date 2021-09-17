@@ -49,8 +49,8 @@ export default class MainView extends React.Component {
 
     const {movies, selectedMovie, user} = this.state;
 
-    if (!user) return <>
-    <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />
+    if (!user) return <>    
+    <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />    
     <RegistrationView onRegister={(user, password) => this.onRegister(user, password)} />
     </>;
 
