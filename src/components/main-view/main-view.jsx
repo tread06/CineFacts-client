@@ -3,6 +3,7 @@ import axios from 'axios';
 import MovieCard from '../movie-card/movie-card';
 import MovieView from '../movie-view/movie-view';
 import LoginView from '../login-view/login-view';
+import RegistrationView from '../registration-view/registration-view';
 
 export default class MainView extends React.Component {  
   constructor(){
@@ -39,11 +40,20 @@ export default class MainView extends React.Component {
     });
   }
 
+  onRegister(user, password) {  
+    console.log("Try Register: "+ user +" "+password);
+    this.onLoggedIn(user);
+  
+  }
+
   render() {   
 
     const {movies, selectedMovie, user} = this.state;
 
-    if (!user) return <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />;
+    if (!user) return <>
+    <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />
+    <RegistrationView onRegister={(user, password) => this.onRegister(user, password)} />
+    </>;
 
     if (movies.length === 0) 
       return <div className="main-view">The list is empty!</div>;
