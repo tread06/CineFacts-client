@@ -42,8 +42,7 @@ export default class MainView extends React.Component {
 
   onRegister(user, password) {  
     console.log("Try Register: "+ user +" "+password);
-    this.onLoggedIn(user);
-  
+    this.onLoggedIn(user);  
   }
 
   render() {   
