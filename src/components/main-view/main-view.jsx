@@ -2,13 +2,15 @@ import React from 'react';
 import axios from 'axios';
 import MovieCard from '../movie-card/movie-card';
 import MovieView from '../movie-view/movie-view';
+import LoginView from '../login-view/login-view';
 
 export default class MainView extends React.Component {  
   constructor(){
     super();
     this.state = {
       movies: [],
-      selectedMovie: null
+      selectedMovie: null,
+      user: null
     }
   }
 
@@ -31,9 +33,17 @@ export default class MainView extends React.Component {
     });
   }
 
+  onLoggedIn(newUser) {
+    this.setState({
+      user: newUser
+    });
+  }
+
   render() {   
 
-    const {movies, selectedMovie} = this.state;
+    const {movies, selectedMovie, user} = this.state;
+
+    if (!user) return <LoginView onLoggedIn={newUser => this.onLoggedIn(newUser)} />;
 
     if (movies.length === 0) 
       return <div className="main-view">The list is empty!</div>;
