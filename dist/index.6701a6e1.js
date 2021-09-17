@@ -23867,7 +23867,7 @@ MovieView.propTypes = {
             DeathYear: _propTypesDefault.default.number
         }).isRequired
     }).isRequired,
-    onClickBack: _propTypesDefault.default.func.isRequired
+    onBackClick: _propTypesDefault.default.func.isRequired
 };
 
   $parcel$ReactRefreshHelpers$3741.postlude(module);

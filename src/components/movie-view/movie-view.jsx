@@ -50,5 +50,5 @@ MovieView.propTypes = {
       DeathYear: PropTypes.number      
     }).isRequired,
   }).isRequired,
-  onClickBack: PropTypes.func.isRequired
+  onBackClick: PropTypes.func.isRequired
 };
