@@ -7,6 +7,7 @@ import RegistrationView from '../registration-view/registration-view';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import './main-view.scss';
 
 export default class MainView extends React.Component {  
@@ -19,17 +20,29 @@ export default class MainView extends React.Component {
     }
   }
 
-  componentDidMount(){
-    //to do: remove authentification for testing
-    axios.get('https://cinefacts-api.herokuapp.com/movies')
-      .then(response => {
-        this.setState({
-          movies: response.data
-        });        
-      })
-      .catch(error => {
-        console.log(error);
+  componentDidMount() {
+    //check to see if there's a token in local storge
+    let accessToken = localStorage.getItem('token');    
+    if (accessToken !== null) {
+      this.setState({
+        user: localStorage.getItem('user')
       });
+      this.getMovies(accessToken);
+    }
+  }
+
+  getMovies(token) {
+    axios.get('https://cinefacts-api.herokuapp.com/movies', {
+      headers: { Authorization: `Bearer ${token}`}
+    })
+    .then(response => {
+      this.setState({
+        movies: response.data
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   setSelectedMovie(newSelectedMovie) {
@@ -37,16 +50,28 @@ export default class MainView extends React.Component {
       selectedMovie: newSelectedMovie
     });
   }
-
-  onLoggedIn(newUser) {
-    this.setState({
-      user: newUser
-    });
-  }
-
   onRegister(user, password) {  
+    //to do: redirect to login or auto log in with register credentials
     console.log("Try Register: "+ user +" "+password);
     this.onLoggedIn(user);  
+  }
+  onLoggedIn(authData) {
+    console.log(authData);
+    this.setState({
+      user: authData.user.Username
+    });
+  
+    //store token and user in local storage
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('user', authData.user.Username);
+    this.getMovies(authData.token);
+  }
+  onLoggedOut() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.setState({
+      user: null
+    });
   }
 
   render() {   
@@ -67,6 +92,7 @@ export default class MainView extends React.Component {
     
     return (
       <Row className="main-view justify-content-md-center">
+        <Button onClick={() => { this.onLoggedOut() }}>Logout</Button>
         {selectedMovie
           ? (
           <Col md={8}>
