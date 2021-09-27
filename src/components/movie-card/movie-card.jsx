@@ -10,7 +10,7 @@ import './movie-card.scss';
 export default class MovieCard extends React.Component {
   render() {
     const { movie } = this.props;
-    return <Card>
+    return <Card className="movie-card">
         <Card.Img variant="top" src={movie.ImageURL} crossOrigin="anonymous" />
         <Card.Body>
           <Card.Title>{movie.Title}</Card.Title>

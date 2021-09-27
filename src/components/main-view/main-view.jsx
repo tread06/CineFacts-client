@@ -12,7 +12,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import './main-view.scss';
 
 export default class MainView extends React.Component {  
@@ -84,8 +83,9 @@ export default class MainView extends React.Component {
 
     const {movies, user} = this.state;  
     
-    return (<>      
-      <Navbar bg="light" expand="lg" sticky="top">
+    //to do: nav bar component
+    return (<>          
+      <Navbar bg="light" expand="lg" sticky="top" className="nav-bar">
         <Container>
           <Navbar.Brand href="/">Cinefacts</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -120,8 +120,8 @@ export default class MainView extends React.Component {
             if (movies.length === 0) return <div className="main-view" />;
                   
             return movies.map(m => (   
-              <Col md={3} key={m._id}>                
-                <MovieCard movie={m} />
+              <Col md={3} key={m._id}>      
+                <MovieCard movie={m} />   
               </Col>
             ))
           }} />
