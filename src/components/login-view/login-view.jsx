@@ -12,7 +12,6 @@ export default function LoginView(props) {
 
   const handleSubmit = (e) => {    
     e.preventDefault();
-    console.log(username, password);
     axios.post('https://cinefacts-api.herokuapp.com/login', {
       Username: username,
       Password: password
@@ -22,7 +21,7 @@ export default function LoginView(props) {
       props.onLoggedIn(data);
     })
     .catch(e => {
-      console.log('no such user');
+      console.log('login error');
     });
   };
 
