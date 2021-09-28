@@ -7,19 +7,28 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './movie-card.scss';
 
-export default class MovieCard extends React.Component {
+export default class MovieCard extends React.Component {  
+
+
+  onCardClick(){
+    console.log("Click");
+  }
+
   render() {
     const { movie } = this.props;
-    return <Card className="movie-card">
+    return <Link to={`/movies/${movie._id}`} className="link">
+      <Card className="movie-card" onClick={this.onCardClick}>
         <Card.Img variant="top" src={movie.ImageURL} crossOrigin="anonymous" />
         <Card.Body>
           <Card.Title>{movie.Title}</Card.Title>
           <Card.Text>{movie.Description}</Card.Text>
-          <Link to={`/movies/${movie._id}`}>
+          {/* <Link to={`/movies/${movie._id}`}>
             <Button variant="link">Open</Button>
-          </Link>
+          </Link> */}
         </Card.Body>
       </Card>
+    </Link>
+    
   }
 }
 

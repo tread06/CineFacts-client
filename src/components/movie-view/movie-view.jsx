@@ -21,7 +21,7 @@ export default class MovieView extends React.Component {
   
 
   render() {
-    const { movie, onBackClick } = this.props;    
+    const { movie, onBackClick } = this.props;   
 
     return (
       <div className="movie-view">
@@ -43,17 +43,14 @@ export default class MovieView extends React.Component {
             <Link to={`/directors/${movie.Director.Name}`}>
               <Button variant="link">{movie.Director.Name}</Button>
             </Link>
-          </div>
-          
-          {
-          //to do: add genre view
+          </div> 
 
-          /* <div className="movie-genre">
+          <div className="movie-genre">
             <span className="value">{"Genre:"}</span>
-            <Link to={`/genres/${movie.Genre.Name}`}>
-            <Button variant="link">Genre</Button>
-          </Link>
-          </div> */}         
+            <Link to={`/genre/${movie.Genre.Name}`}>
+              <Button variant="link">{movie.Genre.Name}</Button>
+            </Link>
+          </div>       
 
           <Button variant="primary" size="sm" onClick= {() => {onBackClick(null);}}>Back</Button>
         </div>
@@ -67,7 +64,10 @@ MovieView.propTypes = {
     Title: PropTypes.string.isRequired,
     Description: PropTypes.string.isRequired,
     ImageURL: PropTypes.string.isRequired,
-    Genre: PropTypes.string.isRequired,
+    Genre: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired
+    }).isRequired,
     Director: PropTypes.shape({
       Name: PropTypes.string.isRequired,
       Bio: PropTypes.string.isRequired,

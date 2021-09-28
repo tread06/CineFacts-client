@@ -5,6 +5,8 @@ import MovieView from '../movie-view/movie-view';
 import LoginView from '../login-view/login-view';
 import RegistrationView from '../registration-view/registration-view';
 import ProfileView from '../profile-view/profile-view';
+import DirectorView from '../director-view/director-view';
+import GenreView from '../genre-view/genre-view';
 
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
@@ -13,6 +15,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import './main-view.scss';
+
 
 export default class MainView extends React.Component {  
   constructor(){
@@ -45,7 +48,22 @@ export default class MainView extends React.Component {
     .then(response => {
       this.setState({
         movies: response.data
-      });
+      });            
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  getUser(token) {
+    axios.get('https://cinefacts-api.herokuapp.com/users/' + this.state.user, {
+      headers: { Authorization: `Bearer ${token}`}
+    })
+    .then(response => {
+      this.setState({
+        movies: response.data
+      });        
+      console.log("Got user")
     })
     .catch(function (error) {
       console.log(error);
@@ -97,12 +115,15 @@ export default class MainView extends React.Component {
             <Nav>
             {user ? (              
               <NavDropdown title={user} id="basic-nav-dropdown" >
-                <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Item href={"/profile"}>Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={this.logout}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
+              <>
+              <Nav.Link href="/">Login</Nav.Link>
               <Nav.Link href="/register">Register</Nav.Link>
+              </>
             )}  
             </Nav>
           </Navbar.Collapse>
@@ -137,7 +158,7 @@ export default class MainView extends React.Component {
             if (!user) return <Col>
             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
             </Col>  
-
+            
             return <Col md={8}>
               <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
             </Col>
@@ -148,16 +169,29 @@ export default class MainView extends React.Component {
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
               </Col>  
             return <Col md={8}>
-                <ProfileView user={user} />
+                <ProfileView user={this.getUser()} />
             </Col>
           }} />
 
-          {/* <Route path="/directors/:name" render={({ match, history }) => {
+          <Route path="/directors/:name" render={({ match, history }) => {
             if (movies.length === 0) return <div className="main-view" />;
               return <Col md={8}>
-                <DirectorView director={movies.find(m => m.Director.Name === match.params.name).Director} onBackClick={() => history.goBack()} />
+                <DirectorView 
+                director={movies.find(m => m.Director.Name === match.params.name).Director} 
+                movies = {movies.filter(m => m.Director.Name === match.params.name)}
+                onBackClick={() => history.goBack()} />
               </Col>
-          }} /> */}
+          }} />
+
+          <Route path="/genre/:name" render={({ match, history }) => {
+            if (movies.length === 0) return <div className="genre-view" />;
+              return <Col md={8}>
+                <GenreView 
+                genre={movies.find(m => m.Genre.Name === match.params.name).Genre} 
+                movies = {movies.filter(m => m.Genre.Name === match.params.name)}
+                onBackClick={() => history.goBack()} />
+              </Col>
+          }} />
 
         </Row>
       </Router>
