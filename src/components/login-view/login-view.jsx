@@ -16,12 +16,11 @@ export default function LoginView(props) {
       Username: username,
       Password: password
     })
-    .then(response => {
-      const data = response.data;
-      props.onLoggedIn(data);
+    .then(response => {         
+      props.onLoggedIn(response.data);
     })
     .catch(e => {
-      console.log('login error');
+      console.log(e);
     });
   };
 

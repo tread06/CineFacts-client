@@ -23,20 +23,18 @@ export default class MainView extends React.Component {
     this.state = {
       movies: [],
       selectedMovie: null,
-      user: null
-    }
+      user: null      
+    }    
     this.logout = this.logout.bind(this);
   }
 
-  componentDidMount() {
-    //check to see if there's a token in local storge
+  componentDidMount() {    
+    
     let accessToken = localStorage.getItem('token');    
+    let userName = localStorage.getItem('user');
+
     if (accessToken !== null) {
-      this.setState({
-        // assign user from local storage
-        user: localStorage.getItem('user')
-      });
-      //request movie list using auth token
+      this.getUser(userName, accessToken);     
       this.getMovies(accessToken);
     }
   }
@@ -55,20 +53,21 @@ export default class MainView extends React.Component {
     });
   }
 
-  getUser(token) {
-    axios.get('https://cinefacts-api.herokuapp.com/users/' + this.state.user, {
+  getUser(userName, token) {    
+    axios.get('https://cinefacts-api.herokuapp.com/users/' + userName, {
       headers: { Authorization: `Bearer ${token}`}
     })
     .then(response => {
       this.setState({
-        movies: response.data
-      });        
-      console.log("Got user")
+        user: response.data
+      });  
     })
     .catch(function (error) {
       console.log(error);
     });
   }
+
+  
 
   setSelectedMovie(newSelectedMovie) {
     this.setState({
@@ -77,15 +76,18 @@ export default class MainView extends React.Component {
   }
   
   onLoggedIn(authData) {
-    this.setState({
-      user: authData.user.Username
-    });
-  
+
     //store token and user in local storage
     localStorage.setItem('token', authData.token);
     localStorage.setItem('user', authData.user.Username);
+
+    //update state from user data    
     this.getMovies(authData.token);
+    this.getUser(authData.Username, authData.token);
+    window.open('/', '_self');
   }
+
+  
 
   logout()
   {
@@ -95,6 +97,13 @@ export default class MainView extends React.Component {
     this.setState({
       user: null
     });  
+  }
+
+  onUserUpdated(userData){
+    this.logout();
+  }
+  onUserDeleted(){
+    this.logout();
   }
 
   render() {   
@@ -114,7 +123,7 @@ export default class MainView extends React.Component {
             </Nav>
             <Nav>
             {user ? (              
-              <NavDropdown title={user} id="basic-nav-dropdown" >
+              <NavDropdown title={user.Username} id="basic-nav-dropdown" >
                 <NavDropdown.Item href={"/profile"}>Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={this.logout}>Logout</NavDropdown.Item>
@@ -160,7 +169,11 @@ export default class MainView extends React.Component {
             </Col>  
             
             return <Col md={8}>
-              <MovieView movie={movies.find(m => m._id === match.params.movieId)} onBackClick={() => history.goBack()} />
+              <MovieView 
+                movie={movies.find(m => m._id === match.params.movieId)} 
+                onBackClick={() => history.goBack()}
+                onFavoriteClick={(movieId) => this.addFavorite(movieId)} 
+                isFavorite = {user.FavoriteMovies.includes(match.params.movieId)}/>
             </Col>
           }} />
 
@@ -169,7 +182,12 @@ export default class MainView extends React.Component {
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
               </Col>  
             return <Col md={8}>
-                <ProfileView user={this.getUser()} />
+              <ProfileView 
+                user={user}
+                updateUser={user => this.updateUser(user)} 
+                movies = {movies}
+                onProfileUpdated = {() => {this.onUserUpdated()}}
+                onProfileDeleted = {() => {this.onUserDeleted()}}/>
             </Col>
           }} />
 
@@ -177,9 +195,9 @@ export default class MainView extends React.Component {
             if (movies.length === 0) return <div className="main-view" />;
               return <Col md={8}>
                 <DirectorView 
-                director={movies.find(m => m.Director.Name === match.params.name).Director} 
-                movies = {movies.filter(m => m.Director.Name === match.params.name)}
-                onBackClick={() => history.goBack()} />
+                  director={movies.find(m => m.Director.Name === match.params.name).Director} 
+                  movies = {movies.filter(m => m.Director.Name === match.params.name)}
+                  onBackClick={() => history.goBack()} />
               </Col>
           }} />
 
