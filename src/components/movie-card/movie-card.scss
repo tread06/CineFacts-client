@@ -1,4 +1,20 @@
-.open-button{
+.open-button {
   width: 50%;
-  margin-left: 25%;   
+  margin-left: 25%;
+}
+.movie-card {
+  box-shadow: 0px 5px 5px 1px rgba(44, 44, 44, 0.1);
+  margin: 10px;
+
+  transition: 0.3s transform cubic-bezier(0.155, 1.105, 0.295, 1.12), 0.3s;
+}
+.movie-card:hover {
+  transform: scale(1.03);
+}
+.link {
+  color: black;
+  text-decoration: none;
+}
+.link:hover {
+  color: black;
 }

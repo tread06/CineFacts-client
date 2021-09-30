@@ -1,42 +1,103 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+
+import { Link } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import './movie-view.scss';
 
 export default class MovieView extends React.Component {
 
-  keypressCallback(event) {
-    console.log(event.key);
+  constructor(props) {
+    super(props);
+    // Don't call this.setState() here!
+    this.state = { isFavorite: props.isFavorite };
   }
 
-  componentDidMount(){
-    document.addEventListener('keypress', this.keypressCallback);
+  addFavorite = () =>{    
+      let token = localStorage.getItem('token');    
+      let userName = localStorage.getItem('user');
+  
+      let axiosConfig = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      
+      axios.post('https://cinefacts-api.herokuapp.com/users/' + userName + '/movies/' + this.props.movie._id, null, axiosConfig)
+      .then(response => {
+        console.log("Movie added to favorites"); 
+        this.setState({
+          isFavorite: true
+        })        
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
-  componentWillUnmount() {
-    document.removeEventListener('keypress', this.keypressCallback);
+  removeFavorite = () =>{
+    let token = localStorage.getItem('token');    
+      let userName = localStorage.getItem('user');
+  
+      let axiosConfig = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      
+      axios.delete('https://cinefacts-api.herokuapp.com/users/' + userName + '/movies/' + this.props.movie._id, axiosConfig)
+      .then(response => {
+        console.log("Movie deleted from favorites"); 
+        this.setState({
+          isFavorite: false
+        })  
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    
   }
   
 
   render() {
-    const { movie, onBackClick } = this.props;    
+    const { movie, onBackClick} = this.props;   
 
     return (
       <div className="movie-view">
         <div className="movie-poster">
           <img className="movie-poster-img" src={movie.ImageURL} crossOrigin="anonymous"/>
         </div>
+
         <div className="movie-info">
           <div className="movie-title">
             <h2 className="value">{movie.Title}</h2>
           </div>
+
           <div className="movie-description">
             <p className="value">{movie.Description}</p>
           </div>
+
           <div className="movie-director">
-            <p className="value">{"Director: " + movie.Director.Name}</p>
-          </div>
+            <span className="value">{"Director:"}</span>
+            <Link to={`/directors/${movie.Director.Name}`}>
+              <Button variant="link">{movie.Director.Name}</Button>
+            </Link>
+          </div> 
+
+          <div className="movie-genre">
+            <span className="value">{"Genre:"}</span>
+            <Link to={`/genre/${movie.Genre.Name}`}>
+              <Button variant="link">{movie.Genre.Name}</Button>
+            </Link>
+          </div>       
+
           <Button variant="primary" size="sm" onClick= {() => {onBackClick(null);}}>Back</Button>
+
+          {this.state.isFavorite ?           
+          <Button variant="danger" size="sm" onClick= {this.removeFavorite}>Remove Favorite</Button>
+          :<Button variant="primary" size="sm" onClick= {this.addFavorite}>Add Favorite</Button>
+          }          
         </div>
       </div>
     );
@@ -48,7 +109,10 @@ MovieView.propTypes = {
     Title: PropTypes.string.isRequired,
     Description: PropTypes.string.isRequired,
     ImageURL: PropTypes.string.isRequired,
-    Genre: PropTypes.string.isRequired,
+    Genre: PropTypes.shape({
+      Name: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired
+    }).isRequired,
     Director: PropTypes.shape({
       Name: PropTypes.string.isRequired,
       Bio: PropTypes.string.isRequired,
@@ -56,5 +120,6 @@ MovieView.propTypes = {
       DeathYear: PropTypes.number      
     }).isRequired,
   }).isRequired,
-  onBackClick: PropTypes.func.isRequired
+  onBackClick: PropTypes.func.isRequired,  
+  isFavorite: PropTypes.bool.isRequired
 };

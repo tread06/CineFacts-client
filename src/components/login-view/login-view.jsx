@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -11,10 +12,16 @@ export default function LoginView(props) {
 
   const handleSubmit = (e) => {    
     e.preventDefault();
-    console.log(username, password);
-    /* Send a request to the server for authentication */
-    /* then call props.onLoggedIn(username) */
-    props.onLoggedIn(username);
+    axios.post('https://cinefacts-api.herokuapp.com/login', {
+      Username: username,
+      Password: password
+    })
+    .then(response => {         
+      props.onLoggedIn(response.data);
+    })
+    .catch(e => {
+      console.log(e);
+    });
   };
 
   return (
