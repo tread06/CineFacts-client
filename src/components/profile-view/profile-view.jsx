@@ -135,9 +135,6 @@ export default function ProfileView(props) {
   );
 }
 
-
-//to do: get all user data as an object
-//get function to udpate user
 ProfileView.propTypes = {
   user: PropTypes.shape({
     Username: string.isRequired,

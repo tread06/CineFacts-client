@@ -25,11 +25,7 @@ export default function RegistrationView(props) {
     .then(response => {
       const data = response.data;
       console.log(data);
-
-      //refresh the page
-      window.open('/', '_self'); // the second argument '_self' is necessary so that the page will open in the current tab
-      //to do: auto log in
-      
+      window.open('/', '_self'); // the second argument '_self' is necessary so that the page will open in the current tab      
     })
     .catch(e => {
       console.log(e);
@@ -58,7 +54,6 @@ export default function RegistrationView(props) {
         <Form.Label>Birthday:</Form.Label>
         <Form.Control type="date" onChange={e => setBirthday(e.target.value)} />
       </Form.Group>
-
 
       <br></br>
       <Button variant="primary" type="submit" onClick={handleSubmit}>

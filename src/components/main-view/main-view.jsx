@@ -65,9 +65,7 @@ export default class MainView extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
-  }
-
-  
+  }  
 
   setSelectedMovie(newSelectedMovie) {
     this.setState({
@@ -76,7 +74,6 @@ export default class MainView extends React.Component {
   }
   
   onLoggedIn(authData) {
-
     //store token and user in local storage
     localStorage.setItem('token', authData.token);
     localStorage.setItem('user', authData.user.Username);
@@ -85,9 +82,7 @@ export default class MainView extends React.Component {
     this.getMovies(authData.token);
     this.getUser(authData.Username, authData.token);
     window.open('/', '_self');
-  }
-
-  
+  }  
 
   logout()
   {
@@ -141,7 +136,6 @@ export default class MainView extends React.Component {
 
       <Router>
         <Row className="main-view justify-content-md-center"> 
-
           <Route exact path="/" render={() => {            
             if (!user) return <Col md={4}>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
@@ -210,7 +204,6 @@ export default class MainView extends React.Component {
                 onBackClick={() => history.goBack()} />
               </Col>
           }} />
-
         </Row>
       </Router>
       </>
