@@ -34,7 +34,6 @@ export default function GenreView(props){
         </Col>))}
       </Row>         
       : "no movies"}
-
     </>
   );
 }
