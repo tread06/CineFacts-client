@@ -7,10 +7,11 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 //redux / action
 import { connect } from 'react-redux';
 import { setMovies } from '../../actions/actions';
+import { setUser } from '../../actions/actions';
 import MovieList from '../movie-list/movie-list';
 
 //components
-import MovieCard from '../movie-card/movie-card';
+import Navigation from '../nav-bar/nav-bar';
 import MovieView from '../movie-view/movie-view';
 import LoginView from '../login-view/login-view';
 import RegistrationView from '../registration-view/registration-view';
@@ -21,17 +22,11 @@ import GenreView from '../genre-view/genre-view';
 //bootstrap / css
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import './main-view.scss';
-
 
 class MainView extends React.Component {  
   constructor(){
-    super();
-    this.state = {      
-      user: null      
-    }    
+    super(); 
     this.logout = this.logout.bind(this);
   }
 
@@ -43,15 +38,14 @@ class MainView extends React.Component {
     if (accessToken !== null) {
       this.getUser(userName, accessToken);     
       this.getMovies(accessToken);
-    }
+    }    
   }
 
   getMovies(token) {
     axios.get('https://cinefacts-api.herokuapp.com/movies', {
       headers: { Authorization: `Bearer ${token}`}
     })
-    .then(response => {
-      //use action to set state
+    .then(response => {      
       this.props.setMovies(response.data);            
     })
     .catch(function (error) {
@@ -64,14 +58,12 @@ class MainView extends React.Component {
       headers: { Authorization: `Bearer ${token}`}
     })
     .then(response => {
-      this.setState({
-        user: response.data
-      });  
+      this.props.setUser(response.data);  
     })
     .catch(function (error) {
       console.log(error);
     });
-  }  
+  }
 
   setSelectedMovie(newSelectedMovie) {
     this.setState({
@@ -82,11 +74,8 @@ class MainView extends React.Component {
   onLoggedIn(authData) {
     //store token and user in local storage
     localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.Username);
-
-    //update state from user data    
-    this.getMovies(authData.token);
-    this.getUser(authData.Username, authData.token);
+    localStorage.setItem('user', authData.user.Username);    
+    this.getUser(authData.Username, authData.token);    
     window.open('/', '_self');
   }  
 
@@ -95,9 +84,7 @@ class MainView extends React.Component {
     console.log("Logging out");
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    this.setState({
-      user: null
-    });  
+    this.props.setUser({});  
   }
 
   onUserUpdated(userData){
@@ -105,72 +92,36 @@ class MainView extends React.Component {
   }
   onUserDeleted(){
     this.logout();
-  }
+  }  
 
-  render() {   
-
-    //const {movies, user} = this.state;  
-
+  render() {  
+      
     let {movies} = this.props;
-    let {user} = this.state;
+    let {user} = this.props;
+    let isLoggedIn = Object.keys(user).length > 0;
     
     //to do: nav bar component
-    return (<>          
-      <Navbar bg="light" expand="lg" sticky="top" className="nav-bar">
-        <Container>
-          <Navbar.Brand href="/">Cinefacts</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav" >
-            <Nav className="me-auto">
-              <Nav.Link href="/">Movies</Nav.Link>
-              <Nav.Link href="/">About</Nav.Link>              
-            </Nav>
-            <Nav>
-            {user ? (              
-              <NavDropdown title={user.Username} id="basic-nav-dropdown" >
-                <NavDropdown.Item href={"/profile"}>Profile</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={this.logout}>Logout</NavDropdown.Item>
-              </NavDropdown>
-            ) : (
-              <>
-              <Nav.Link href="/">Login</Nav.Link>
-              <Nav.Link href="/register">Register</Nav.Link>
-              </>
-            )}  
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
+    return (<>  
+      <Navigation  onLogout ={() => this.logout()} />
       <Router>
         <Row className="main-view justify-content-md-center"> 
           <Route exact path="/" render={() => {            
-            if (!user) return <Col md={4}>
+            if (!isLoggedIn) return <Col md={4}>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
-              </Col> 
-
-            if (movies.length === 0) return <div className="main-view" />;
-                  
-            //move list instead of map
+              </Col>
+            if (movies.length === 0) return <div className="main-view">No movies found.</div>; 
             return <MovieList movies={movies}/>;
-
-            // return movies.map(m => (   
-            //   <Col md={3} key={m._id}>      
-            //     <MovieCard movie={m} />   
-            //   </Col>
-            // ))
           }} />
 
           <Route path="/register" render={({ match, history }) => {
-            if (user) return <Redirect to="/" />
+            if (isLoggedIn) return <Redirect to="/" />
             return <Col md={4}>
               <RegistrationView />
             </Col>
           }} />
 
           <Route path="/movies/:movieId" render={({ match, history }) => {
-            if (!user) return <Col>
+            if (!isLoggedIn) return <Col>
             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
             </Col>  
             
@@ -182,16 +133,13 @@ class MainView extends React.Component {
                 isFavorite = {user.FavoriteMovies.includes(match.params.movieId)}/>
             </Col>
           }} />
-
+          
           <Route path="/profile" render={({ match, history }) => {
-            if (!user) return <Col md={4}>
+            if (!isLoggedIn) return <Col md={4}>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
               </Col>  
             return <Col md={8}>
-              <ProfileView 
-                user={user}
-                updateUser={user => this.updateUser(user)} 
-                movies = {movies}
+              <ProfileView   
                 onProfileUpdated = {() => {this.onUserUpdated()}}
                 onProfileDeleted = {() => {this.onUserDeleted()}}/>
             </Col>
@@ -224,11 +172,10 @@ class MainView extends React.Component {
 }
 
 //create props for this component from the state
-let mapStateToProps = state => {
-  return { movies: state.movies }
+let mapStateToProps = state => {  
+  return { movies: state.movies, user: state.user }
 }
 
 //export the component class with redux store connection
-export default connect(mapStateToProps, { setMovies } )(MainView);
-
+export default connect(mapStateToProps, { setMovies, setUser } )(MainView);
 //export default connect(functionType, { list of actions to bind } )(MainView);

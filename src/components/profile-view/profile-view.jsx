@@ -3,35 +3,40 @@ import PropTypes, { instanceOf, string } from 'prop-types';
 import './profile-view.scss';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import MovieCard from '../movie-card/movie-card';
+import MovieCardSmall from '../movie-card-small/movie-card-small';
+
+import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Row, Col } from 'react-bootstrap';
-import { propTypes } from 'react-bootstrap/esm/Image';
+import { Card } from 'react-bootstrap';
 
-export default function ProfileView(props) { 
+const mapStateToProps = state => {
+  const { user, movies } = state;
+  return { user, movies };
+};
 
+function ProfileView(props) { 
+
+  const { user, movies } = props;
+
+  //form state
   const [ password, setPassword ] = useState('');
   const [ email, setEmail ] = useState(props.user.Email);
   const [ birthday, setBirthday ] = useState(new Date(props.user.Birthday).toISOString().substr(0,10)); 
-  
-  useEffect(() => {    
-    console.log(new Date(props.user.Birthday).toISOString().substr(0,10));
-    console.log(email);
-  }, [email]);  
 
-  movieList = () => {
-    //filter movie list
+  //show favorite movies
+  movieList = () => {    
     let favorites = [];
-    props.movies.forEach(m => {
-      props.user.FavoriteMovies.forEach(f => {
+    movies.forEach(m => {
+      user.FavoriteMovies.forEach(f => {
         if(m._id === f){
           favorites.push(m);
         }
       });
     });
-    return favorites;    
+    return favorites;
   }
 
   const handleSubmitUpdate = (e) => {   
@@ -49,16 +54,14 @@ export default function ProfileView(props) {
     }
     })
     .then(response => {
-      console.log(response);
-      console.log(response.data);
+      props.onProfileUpdated(response.data);
       }) 
     .catch(function (error) {
       console.log(error);
     });      
   };
 
-  const handleSubmitDelete = (e) => {  
-
+  const handleSubmitDelete = (e) => { 
     e.preventDefault();
     const token = localStorage.getItem('token');    
     let axiosConfig = {
@@ -78,7 +81,8 @@ export default function ProfileView(props) {
   };
   
   return (<>
-    <Form>
+  <Card className="profile-card">
+    <Form className="form">
       <h3>{props.user.Username}</h3>
       <br></br>
       <Form.Group controlId="registrationFormEmail">
@@ -114,48 +118,30 @@ export default function ProfileView(props) {
       Update User</Button>
 
       <Button 
+      className="delete-button"
       variant="danger" 
       type="submit" 
       onClick={handleSubmitDelete}>
       Delete User</Button>
 
-    </Form>
-    <br></br>
-    <h3>Favorites</h3>
-    
-    {movieList().length > 0 ?   
+    </Form>    
+  </Card>
+
+
+  {props.user.FavoriteMovies.length > 0 ? <>
+      <h3 className="favorites-label">Favorties</h3>
       <Row>
-        {movieList().map(m => (   
-        <Col md={4} key={m._id}>      
-          <MovieCard movie={m} />   
-        </Col>))}
-      </Row>         
-      : "No favorite movies have been added yet."}
+        {movieList().map(m => (
+          <Col md={4} key={m._id}>
+            <MovieCardSmall movie={m} />
+          </Col>
+        ))}
+      </Row>  
     </>
+    : <></>}
+  </>
+
   );
 }
 
-ProfileView.propTypes = {
-  user: PropTypes.shape({
-    Username: string.isRequired,
-    Email: string.isRequired,
-    Birthday: string,
-    FavoriteMovies: PropTypes.arrayOf(PropTypes.string).isRequired  
-  }),
-  movies: PropTypes.arrayOf(PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string.isRequired,
-    ImageURL: PropTypes.string.isRequired,
-    Genre: PropTypes.shape({
-      Name: PropTypes.string.isRequired,
-      Description: PropTypes.string.isRequired
-    }),
-    Director: PropTypes.shape({
-      Name: PropTypes.string.isRequired,
-      Bio: PropTypes.string.isRequired,
-      BirthYear: PropTypes.number,
-      DeathYear: PropTypes.number      
-    })})).isRequired,
-    onProfileUpdated: PropTypes.func.isRequired,
-    onProfileDeleted: PropTypes.func.isRequired
-};
+export default connect(mapStateToProps)(ProfileView);

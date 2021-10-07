@@ -8,9 +8,19 @@ import './index.scss';
 
 //redux
 import { createStore } from 'redux';
+import { compose } from 'redux';
 import { Provider } from 'react-redux';
 import moviesApp from './reducers/reducers';
-const store = createStore(moviesApp);
+
+const enhancers = compose(
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
+const store = createStore(
+  moviesApp,
+  //defaultState,
+  enhancers
+);
 
 // Main component (will eventually use all the others)
 class CineFactsApp extends React.Component {

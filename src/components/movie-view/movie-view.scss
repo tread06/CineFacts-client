@@ -1,6 +1,7 @@
 .movie-view {
   display: flex;
   margin: 50px;
+  align-content: stretch;  
 }
 .movie-poster {
   flex: 2;
@@ -12,3 +13,12 @@
   flex: 3;
   padding: 20px;
 }
+.break{
+  background-color: rgb(216, 216, 216);
+  height: 2px;
+}
+.back-button{
+  width: 100%;
+  margin: 0;
+}
+

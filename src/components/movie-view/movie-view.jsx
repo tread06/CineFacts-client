@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import FavoritePanel from '../favorite-panel/favorite-panel';
 import { Link } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import './movie-view.scss';
+import { Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 export default class MovieView extends React.Component {
 
@@ -63,16 +66,20 @@ export default class MovieView extends React.Component {
   render() {
     const { movie, onBackClick} = this.props;   
 
-    return (
-      <div className="movie-view">
+    return (      
+      <Row className="main-view justify-content-md-center h-100">
+        <Col xs={12} md={6}>
         <div className="movie-poster">
           <img className="movie-poster-img" src={movie.ImageURL} crossOrigin="anonymous"/>
         </div>
-
+        </Col>
+        <Col>
         <div className="movie-info">
           <div className="movie-title">
             <h2 className="value">{movie.Title}</h2>
           </div>
+
+          <div className = "break"></div><br></br>
 
           <div className="movie-description">
             <p className="value">{movie.Description}</p>
@@ -90,16 +97,16 @@ export default class MovieView extends React.Component {
             <Link to={`/genre/${movie.Genre.Name}`}>
               <Button variant="link">{movie.Genre.Name}</Button>
             </Link>
-          </div>       
+          </div>  
 
-          <Button variant="primary" size="sm" onClick= {() => {onBackClick(null);}}>Back</Button>
+          <div className = "break"></div><br></br>
 
-          {this.state.isFavorite ?           
-          <Button variant="danger" size="sm" onClick= {this.removeFavorite}>Remove Favorite</Button>
-          :<Button variant="primary" size="sm" onClick= {this.addFavorite}>Add Favorite</Button>
-          }          
+          <Button className="back-button" variant="primary" size="sm" onClick= {() => {onBackClick(null);}}>Back</Button>         
+          
         </div>
-      </div>
+        </Col>
+      </Row>
+      
     );
   }
 }

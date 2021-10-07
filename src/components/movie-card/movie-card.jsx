@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import FavoritePanel from '../favorite-panel/favorite-panel';
 
 import { Link } from "react-router-dom";
 
@@ -9,22 +10,20 @@ import './movie-card.scss';
 
 export default class MovieCard extends React.Component {  
 
-
-  onCardClick(){
-    console.log("Click");
-  }
-
   render() {
     const { movie } = this.props;
-    return <Link to={`/movies/${movie._id}`} className="link">
+    return <>   
       <Card className="movie-card" onClick={this.onCardClick}>
+        <FavoritePanel movieId = {movie._id}/>
+        <Link to={`/movies/${movie._id}`} className="link">        
         <Card.Img variant="top" src={movie.ImageURL} crossOrigin="anonymous" />
         <Card.Body>
           <Card.Title>{movie.Title}</Card.Title>
           <Card.Text>{movie.Description}</Card.Text>
         </Card.Body>
+        </Link> 
       </Card>
-    </Link>    
+    </>
   }
 }
 

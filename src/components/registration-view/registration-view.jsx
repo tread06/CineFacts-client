@@ -33,7 +33,7 @@ export default function RegistrationView(props) {
   };
 
   return (
-    <Form>
+    <Form className="main-form">
       <h3>Register</h3>
       <Form.Group controlId="registrationFormEmail">
         <Form.Label>Email:</Form.Label>
