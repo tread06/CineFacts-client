@@ -22,7 +22,9 @@ function ProfileView(props) {
   const { user, movies } = props;
 
   //form state
+  const [ errors, setErrors ] = useState('');
   const [ password, setPassword ] = useState('');
+  const [ passwordConfirm, setPasswordConfirm ] = useState('');
   const [ email, setEmail ] = useState(props.user.Email);
   const [ birthday, setBirthday ] = useState(new Date(props.user.Birthday).toISOString().substr(0,10)); 
 
@@ -41,6 +43,40 @@ function ProfileView(props) {
 
   const handleSubmitUpdate = (e) => {   
     e.preventDefault();
+
+
+    //validate
+    let errors = {}  
+    if(!password){
+      console.log("Password Required");
+      errors.password = "Password required";
+    }else if(password.length < 6){
+      console.log("Password Must be 6 characters long");
+      errors.password = "Password must be at least 6 characters";
+    }
+    if(!passwordConfirm){
+      console.log("Confirm Password Required");
+      errors.passwordConfirm = "Confirm password required";
+    }if(password !== passwordConfirm){
+      console.log("Passwords do not match");
+      errors.passwordConfirm = "Passwords do not match";
+    }
+    
+    if(!email){
+      console.log("Email Required");
+      errors.email = "Email Required";
+    } else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email) ){
+      console.log("Email invalid");
+      errors.email = "Email address is invalid";
+    }
+
+    setErrors(errors);
+    if(Object.keys(errors).length > 0){
+      return;
+    }
+
+
+
     const token = localStorage.getItem('token');
     axios.put('https://cinefacts-api.herokuapp.com/users/' + props.user.Username, {
       Username: props.user.Username,
@@ -90,8 +126,8 @@ function ProfileView(props) {
         <Form.Control 
           type="email" 
           onChange={e => setEmail(e.target.value)}
-          defaultValue={email}
-        />
+          defaultValue={email}/>
+        {errors.email && <p className="error">{errors.email}</p>}
       </Form.Group>
 
       <Form.Group controlId="registrationFormPassword">
@@ -99,6 +135,15 @@ function ProfileView(props) {
         <Form.Control 
         type="password" 
         onChange={e => setPassword(e.target.value)}/>
+        {errors.password && <p className="error">{errors.password}</p>}
+      </Form.Group>
+
+      <Form.Group controlId="registrationFormPasswordConfirm">
+        <Form.Label>Confirm Password:</Form.Label>
+        <Form.Control 
+        type="password" 
+        onChange={e => setPasswordConfirm(e.target.value)}/>
+        {errors.passwordConfirm && <p className="error">{errors.passwordConfirm}</p>}
       </Form.Group>
 
       <Form.Group controlId="registrationFormBirthday">
@@ -129,7 +174,7 @@ function ProfileView(props) {
 
 
   {props.user.FavoriteMovies.length > 0 ? <>
-      <h3 className="favorites-label">Favorties</h3>
+      <h3 className="favorites-label">Favorite Movies</h3>
       <Row>
         {movieList().map(m => (
           <Col md={4} key={m._id}>

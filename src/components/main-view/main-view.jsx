@@ -18,6 +18,7 @@ import RegistrationView from '../registration-view/registration-view';
 import ProfileView from '../profile-view/profile-view';
 import DirectorView from '../director-view/director-view';
 import GenreView from '../genre-view/genre-view';
+import AboutView from '../about-view/about-view';
 
 //bootstrap / css
 import Row from 'react-bootstrap/Row';
@@ -103,25 +104,32 @@ class MainView extends React.Component {
     //to do: nav bar component
     return (<>  
       <Navigation  onLogout ={() => this.logout()} />
+
       <Router>
         <Row className="main-view justify-content-md-center"> 
           <Route exact path="/" render={() => {            
-            if (!isLoggedIn) return <Col md={4}>
+            if (!isLoggedIn) return <Col md={8} lg={6} xl={4}>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
               </Col>
             if (movies.length === 0) return <div className="main-view">No movies found.</div>; 
             return <MovieList movies={movies}/>;
           }} />
 
+          <Route path="/about" render={({ match, history }) => {            
+            return <Col md={8}>
+              <AboutView />
+            </Col>
+          }} />
+
           <Route path="/register" render={({ match, history }) => {
             if (isLoggedIn) return <Redirect to="/" />
-            return <Col md={4}>
+            return <Col md={8} lg={6} xl={4}>
               <RegistrationView />
             </Col>
           }} />
 
           <Route path="/movies/:movieId" render={({ match, history }) => {
-            if (!isLoggedIn) return <Col>
+            if (!isLoggedIn) return <Col md={8} lg={6} xl={4}>
             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
             </Col>  
             
@@ -135,7 +143,7 @@ class MainView extends React.Component {
           }} />
           
           <Route path="/profile" render={({ match, history }) => {
-            if (!isLoggedIn) return <Col md={4}>
+            if (!isLoggedIn) return <Col md={8} lg={6} xl={4}>
                 <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
               </Col>  
             return <Col md={8}>
