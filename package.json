@@ -1,8 +1,7 @@
 {
   "name": "cinefacts-client",
   "version": "1.0.0",
-  "description": "The React frontend of the CineFacts web application.",
-  "main": "src/index.html",
+  "description": "The React frontend of the CineFacts web application.",  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
