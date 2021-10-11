@@ -29,7 +29,7 @@ function ProfileView(props) {
   const [ birthday, setBirthday ] = useState(new Date(props.user.Birthday).toISOString().substr(0,10)); 
 
   //show favorite movies
-  movieList = () => {    
+  const movieList = () => {    
     let favorites = [];
     movies.forEach(m => {
       user.FavoriteMovies.forEach(f => {
