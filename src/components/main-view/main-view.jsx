@@ -103,9 +103,11 @@ class MainView extends React.Component {
     
     //to do: nav bar component
     return (<>  
-      <Navigation  onLogout ={() => this.logout()} />
+      
 
       <Router>
+      <Navigation  onLogout ={() => this.logout()} />
+
         <Row className="main-view justify-content-md-center"> 
           <Route exact path="/" render={() => {            
             if (!isLoggedIn) return <Col md={8} lg={6} xl={4}>

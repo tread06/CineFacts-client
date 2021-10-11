@@ -4,6 +4,7 @@ import PropTypes, { instanceOf, string } from 'prop-types';
 
 import { Navbar, Container, NavDropdown, Nav } from 'react-bootstrap';
 import { propTypes } from 'react-bootstrap/esm/Image';
+import { Link } from 'react-router-dom';
 
 import './nav-bar.scss';
 
@@ -21,20 +22,20 @@ const Navigation = (props) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" >
           <Nav className="me-auto">
-            <Nav.Link href="/">Movies</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>              
+            <Link to={`/`} className="link"> Movies</Link>
+            <Link to={`/about`} className="link"> About</Link>            
           </Nav>
           <Nav>
           {Object.keys(user).length > 0 ? (              
-            <NavDropdown title={props.user.Username} id="basic-nav-dropdown" >
-              <NavDropdown.Item href={"/profile"}>Profile</NavDropdown.Item>
+            <NavDropdown title={props.user.Username} id="basic-nav-dropdown" > 
+              <Link to={`/profile`} className="link"> Profile</Link>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={props.onLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
           ) : (
             <>
-            <Nav.Link href="/">Login</Nav.Link>
-            <Nav.Link href="/register">Register</Nav.Link>
+            <Link to={`/`} className="link"> Login</Link>
+            <Link to={`/register`} className="link"> Register</Link>
             </>
           )}  
           </Nav>
