@@ -18,7 +18,7 @@ export default function GenreView(props){
 
   return (
     <>
-      <Card>
+      <Card className="main">
         <Card.Body>
           <Card.Title>{props.genre.Name}</Card.Title>                  
           <Card.Text>{props.genre.Description}</Card.Text>

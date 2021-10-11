@@ -13,7 +13,7 @@ export default function DirectorView(props){
 
   return (
     <>
-      <Card>
+      <Card className="main">
         <Card.Body>
           <Card.Title>{props.director.Name}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{ props.director.DeathYear ? 

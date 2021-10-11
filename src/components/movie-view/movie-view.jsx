@@ -67,6 +67,7 @@ export default class MovieView extends React.Component {
     const { movie, onBackClick} = this.props;   
 
     return (      
+      <div className = "main">
       <Row className="main-view justify-content-md-center h-100">
         <Col xs={12} md={6}>
         <div className="movie-poster">
@@ -106,8 +107,9 @@ export default class MovieView extends React.Component {
         </div>
         </Col>
       </Row>
-      
+      </div>
     );
+    
   }
 }
 
