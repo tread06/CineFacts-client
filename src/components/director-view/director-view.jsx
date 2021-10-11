@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import MovieCardSmall from '../movie-card-small/movie-card-small';
 
-import { useEffect } from 'react';
-
 import Button from 'react-bootstrap/Button';
 import { Col, Row } from 'react-bootstrap';
-import { propTypes } from 'react-bootstrap/esm/Image';
+import PropTypes from 'prop-types';
 
 export default function DirectorView(props){
 
@@ -39,7 +37,7 @@ export default function DirectorView(props){
   );
 }
 
-DirectorView.prototype = {
+DirectorView.propTypes = {
   director: PropTypes.shape({
     Name: PropTypes.string.isRequired,
     Bio: PropTypes.string.isRequired,

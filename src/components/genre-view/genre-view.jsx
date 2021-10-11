@@ -2,19 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import MovieCardSmall from '../movie-card-small/movie-card-small';
-import { useEffect } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import { Col, Row } from 'react-bootstrap';
 
 export default function GenreView(props){
-
-  useEffect(() => {
-    console.log(props.genre);
-    return () => {
-      cleanup
-    };
-  }, []);
 
   return (
     <>
@@ -39,7 +31,7 @@ export default function GenreView(props){
   );
 }
 
-GenreView.prototype = {
+GenreView.prototypes = {
   genre: PropTypes.shape({
     Name: PropTypes.string.isRequired,
     Description: PropTypes.string.isRequired

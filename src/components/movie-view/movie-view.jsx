@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import FavoritePanel from '../favorite-panel/favorite-panel';
 import { Link } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
@@ -29,8 +28,7 @@ export default class MovieView extends React.Component {
       };
       
       axios.post('https://cinefacts-api.herokuapp.com/users/' + userName + '/movies/' + this.props.movie._id, null, axiosConfig)
-      .then(response => {
-        console.log("Movie added to favorites"); 
+      .then(response => {         
         this.setState({
           isFavorite: true
         })        
