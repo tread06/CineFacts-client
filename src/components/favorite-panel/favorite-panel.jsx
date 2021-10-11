@@ -16,8 +16,7 @@ const mapStateToProps = (state) =>{
   return { user };
 }
 
-toggleFavorite = (props, isFavorite, setFavorite) => {  
-
+const toggleFavorite = (props, isFavorite, setFavorite) => {  
   if(isFavorite){
     setFavorite(false);
     removeFavorite(props, setFavorite);
@@ -26,7 +25,7 @@ toggleFavorite = (props, isFavorite, setFavorite) => {
   }
 }
 
-addFavorite = (props, setFavorite) =>{    
+const addFavorite = (props, setFavorite) =>{    
   let token = localStorage.getItem('token');    
   let userName = localStorage.getItem('user');
   let axiosConfig = {
@@ -45,7 +44,7 @@ addFavorite = (props, setFavorite) =>{
   });
 }
 
-removeFavorite = (props, setFavorite) =>{
+const removeFavorite = (props, setFavorite) =>{
   let token = localStorage.getItem('token');    
   let userName = localStorage.getItem('user');
   let axiosConfig = {
