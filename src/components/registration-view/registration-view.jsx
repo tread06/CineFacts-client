@@ -24,6 +24,9 @@ export default function RegistrationView(props) {
     if(!username.trim()){
       console.log("Username Required");
       errors.username = "Username required";
+    } else if(!/^([0-9]|[a-z])+([0-9a-z]+)$/i.test(username) ){
+    console.log("Email invalid");
+    errors.username = "User name must contain only alphanumeric characters";
     }
     if(!password){
       console.log("Password Required");
