@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 import './login-view.scss';
 
 export default function LoginView(props) {
@@ -62,7 +63,7 @@ export default function LoginView(props) {
       <Button variant="primary" type="submit" onClick={handleSubmit}>
         Login
       </Button>
-      <a className="register-link" href="/register">Register</a>
+      <Link to={`/register`} className="link blue"> Register</Link>
     </Form>    
     </>
   );
