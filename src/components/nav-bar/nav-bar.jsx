@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes, { instanceOf, string } from 'prop-types';
 
 import { Navbar, Container, NavDropdown, Nav } from 'react-bootstrap';
-import { propTypes } from 'react-bootstrap/esm/Image';
 import { Link } from 'react-router-dom';
 
 import './nav-bar.scss';
@@ -28,10 +27,10 @@ const Navigation = (props) => {
           <Nav>
           {Object.keys(user).length > 0 ? (              
             <NavDropdown title={props.user.Username} id="basic-nav-dropdown" > 
-              {/* <Link to={`/profile`} className="link">Profile</Link> */}
-              <Link to={`/profile`} className="link">
-                <NavDropdown.Item onClick={props.onLogout}>Profile</NavDropdown.Item>
-              </Link>
+              <Link to={`/profile`} className="link">Profile</Link>
+              {/* <Link to={`/profile`} className="link">
+                <NavDropdown.Item>Profile</NavDropdown.Item>
+              </Link> */}
               
               <NavDropdown.Item onClick={props.onLogout} className="logout">Logout</NavDropdown.Item>
             </NavDropdown>
