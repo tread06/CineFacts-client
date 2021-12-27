@@ -17,8 +17,7 @@ const enhancers = compose(
   );
 
 const store = createStore(
-  moviesApp,
-  //defaultState,
+  moviesApp,  
   enhancers
 );
 

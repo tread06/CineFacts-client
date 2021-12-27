@@ -80,6 +80,10 @@ class MainView extends React.Component {
     window.open('/', '_self');
   }  
 
+  navigateToProfile =() =>{
+    window.open('/profile', '_self');
+  }
+
   logout()
   {
     console.log("Logging out");
@@ -102,12 +106,10 @@ class MainView extends React.Component {
     let isLoggedIn = Object.keys(user).length > 0;
     
     //to do: nav bar component
-    return (<>  
-      
+    return (<>       
 
       <Router>
-      <Navigation  onLogout ={() => this.logout()} />
-
+      <Navigation onLogout ={() => this.logout()} navigateToProfile={this.navigateToProfile} />
         <Row className="main-view justify-content-md-center"> 
           <Route exact path="/" render={() => {            
             if (!isLoggedIn) return <Col md={8} lg={6} xl={4}>

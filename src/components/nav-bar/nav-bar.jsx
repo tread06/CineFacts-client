@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes, { instanceOf, string } from 'prop-types';
 
-import { Navbar, Container, NavDropdown, Nav } from 'react-bootstrap';
+import { Navbar, Container, NavDropdown, Nav, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import './nav-bar.scss';
@@ -13,9 +13,11 @@ const mapStateToProps = state => {
 };
 
 const Navigation = (props) => {
-  const { user } = props;
+  const { user } = props;  
+  const { navigation } = props; 
+
   return (    
-    <Navbar bg="light" expand="lg" sticky="top" >
+    <Navbar className="nav-bar" bg="light" expand="lg" sticky="top" >
       <Container >
         <Navbar.Brand href="/">Cinefacts</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -25,15 +27,13 @@ const Navigation = (props) => {
             <Link to={`/about`} className="link"> About</Link>            
           </Nav>
           <Nav>
-          {Object.keys(user).length > 0 ? (              
-            <NavDropdown title={props.user.Username} id="basic-nav-dropdown" > 
-              <Link to={`/profile`} className="link">Profile</Link>
-              {/* <Link to={`/profile`} className="link">
-                <NavDropdown.Item>Profile</NavDropdown.Item>
-              </Link> */}
-              
-              <NavDropdown.Item onClick={props.onLogout} className="logout">Logout</NavDropdown.Item>
-            </NavDropdown>
+          {Object.keys(user).length > 0 ? (   
+
+            <DropdownButton id="dropdown-basic-button" title={props.user.Username}>
+              <Dropdown.Item onClick={props.navigateToProfile} >Profile</Dropdown.Item>
+              <Dropdown.Item onClick={props.onLogout}>Logout</Dropdown.Item>             
+            </DropdownButton>
+            
           ) : (
             <>
             <Link to={`/`} className="link"> Login</Link>
@@ -50,5 +50,6 @@ const Navigation = (props) => {
 export default connect(mapStateToProps)(Navigation);
 
 Navigation.propTypes = {
-    onLogout: PropTypes.func.isRequired
+    onLogout: PropTypes.func.isRequired,
+    navigateToProfile: PropTypes.func.isRequired
 };
