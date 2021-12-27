@@ -16,7 +16,7 @@ Cinefacts is a MEAN or MERN stack application that allows users to browse movie 
 
 Core concepts explored in this project:
 * Utilize Redux for state management.
-* Utilize Axios for ajax opperations.
+* Utilize Axios for ajax operations.
 * Utilize React Bootstrap for styling.
 * Utilize React Routing.
 * Project minification using Parcel.
